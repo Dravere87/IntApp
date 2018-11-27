@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<style>
+.popup-panel-overlay{
+    background-color: rgba(0,0,0,0.5);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+.popup-panel{
+    margin: 100px;
+    background-color: #42A4A4;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #DDD;
+}
+
+body {
+	background-color: #42A4A4;
+}
+
+h1 {
+	color: blue;
+}
+
+p {
+	color: red;
+}
+
+div.midbox {
+	background-color: #3E9C9C;
+	margin: auto;
+	width: 35%;
+	border: 0px;
+	padding: 45px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.ui-fileupload-buttonbar {
+	background: transparent none;
+	border: none;
+}
+
+.ui-fileupload-content {
+	display: none;
+}
+
+.ui-fileupload-buttonbar .ui-fileupload-choose {
+	background-color: rgba(142, 103, 64, 0.98);
+}
+
+.inputfile{
+	width:250px;
+    height:26px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-family: "Times New Roman", Times, serif;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: white; 
+    color: black; 
+    border: 2px solid #1d4c4c;
+}
+
+.apply {
+    width:125px;
+    height:30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    font-family: "Times New Roman", Times, serif;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: white; 
+    color: black; 
+    border: 2px solid #1d4c4c;
+}
+
+.apply1{
+	width:250px;
+	float: right;
+}
+
+.apply:hover {
+    background-color: #1d4c4c;
+    color: white;
+}
+
+.apply2{
+	float: right;
+}
+
+</style>
+
+<h:head>
+	<title>Intelligy App</title>
+</h:head>
+<h:body>
+	<h:form>
+	<h:commandButton value="Súgó" action="#{fileUpload.show()}" styleClass="apply">
+                    <f:ajax render="@form"/>
+	</h:commandButton>
+	<h:panelGroup layout="block" styleClass="popup-panel-overlay" rendered="#{fileUpload.showPopup}">
+                <div class="popup-panel">
+                    A csatolandó fájl .xls vagy .xlsx kiterjesztésű excel fájl kell hogy legyen ( Egy példa a csatolandó fájlra a letöltehető ).<br/><br/>
+                    Tartalmilag a következő feltételeknek kell eleget tennie:<br/>
+					•	Az Excel dokumentum 2 lapot kell, hogy tartalmazzon. Első lapon előadás időpontjairól és helyszíneiről kell információt megadnunk.<br/>
+					•	Első sorok tartalmazzák az oszlop neveket. Szekciók, mikortól, meddig.<br/>
+					•	Második sorban a fent említett oszlopok értékeit adjuk meg. Hány teremben (szekció) várható előadás, hány órától kezdődnek az előadások és meddig tartanak.<br/>
+					•	3. sor 1 oszlopától kezdve egymás alá fel kell sorolni az előadások helyszíneit.<br/>
+                    •	Második lapon az előadásokat kell felsorolni.<br/>
+					•	Első sorban az „Előadás címe”, „Előadó”, „Téma”, „Idő intervallum”, „Időpont” és  „Dátum” fejléc mezőket kell, hogy tartalmazzák.<br/>
+					•	Intervallum mezőben az előadás hosszának idejét perc formában kell megadni. Például egy órás előadás hossz megadásához 60-as értéket adjuk meg.<br/>
+					•	Időpont oszlopban a Délelőtt, Délután és Egésznap értékeket adhatjuk meg.<br/>
+					•	Dátum oszlopban a 06/10/2018 formátumot kell követni.<br/>
+                    <h:commandButton value="Ablak bezárása" action="#{fileUpload.hide()}" styleClass="apply">
+                        <f:ajax render="@form"/>
+                    </h:commandButton>
+                    <p:commandButton id="downloadLink" value="Letöltés" ajax="false" actionListener="#{fileUpload.eloDownload}" styleClass="apply apply2">
+    					<p:fileDownload value="#{fileUpload.download}" />
+  					</p:commandButton>
+                </div>
+                
+</h:panelGroup>
+
+	</h:form>
+	<div class="midbox">
+									
+		<h:form id="fileUpoad" enctype="multipart/form-data">
+			<h:inputFile id="fu" value="#{fileUpload.file}" styleClass="inputfile">
+				<f:validator validatorId="fileValidator" />
+			</h:inputFile>
+
+			<h:commandButton value="Fájl feltöltése és előadások beosztása" styleClass="apply apply1"
+				action="#{fileUpload.upload}"></h:commandButton>
+			<p>
+				<h:messages id="messages" />
+			</p>
+		</h:form>
+
+	</div>
+	
+</h:body>
+
+</html>
